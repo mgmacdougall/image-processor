@@ -35,37 +35,21 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.changeFileSize = exports.default = void 0;
-var sharp_1 = __importDefault(require("sharp"));
-var parseText = function (inText) {
-    return inText;
-};
-exports.default = parseText;
-/**
- * This is the function that will change the size of the image.
- * NOTE: Called from the controller layer, that passes on the information.
- * @param image
- * @param width
- * @param height
- */
-var changeFileSize = function (w, h) { return __awaiter(void 0, void 0, void 0, function () {
-    var height, width, f;
-    return __generator(this, function (_a) {
-        switch (_a.label) {
+var indexService_1 = require("../services/indexService");
+var imageController = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var _a, w, h;
+    return __generator(this, function (_b) {
+        switch (_b.label) {
             case 0:
-                height = parseInt(h);
-                width = parseInt(w);
-                f = sharp_1.default('../../images/fjord.jpg').resize(height, width);
-                return [4 /*yield*/, f.toFile('../../images/test.jpg')];
+                _a = req.query, w = _a.w, h = _a.h;
+                return [4 /*yield*/, indexService_1.changeFileSize(h, w)];
             case 1:
-                _a.sent();
+                _b.sent();
+                res.send('successful');
                 return [2 /*return*/];
         }
     });
 }); };
-exports.changeFileSize = changeFileSize;
-//# sourceMappingURL=indexService.js.map
+exports.default = imageController;
+//# sourceMappingURL=ImageController.js.map

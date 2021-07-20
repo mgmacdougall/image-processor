@@ -5,7 +5,7 @@ const indexTextController = (
   req: express.Request,
   res: express.Response
 ): void => {
-  const r = parseText('Hi');
+  const r: string = parseText('Hi');
   res.send(r);
 };
 

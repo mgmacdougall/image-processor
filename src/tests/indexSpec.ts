@@ -8,7 +8,7 @@ describe('Index Route tests', () => {
     const result = await request.get('/');
     expect(result.statusCode).toEqual(200);
   });
-  it('GET "/" should return the text "Hi"', async () =>{
+  it('GET "/" should return the text "Hi"', async () => {
     const result = await request.get('/');
     expect(result.text).toBe('Hi');
   });

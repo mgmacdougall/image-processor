@@ -1,4 +1,7 @@
 "use strict";
+/**
+ * The Cache service is the main service that deals with the file system.
+ */
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -35,37 +38,24 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.changeFileSize = exports.default = void 0;
-var sharp_1 = __importDefault(require("sharp"));
-var parseText = function (inText) {
-    return inText;
-};
-exports.default = parseText;
-/**
- * This is the function that will change the size of the image.
- * NOTE: Called from the controller layer, that passes on the information.
- * @param image
- * @param width
- * @param height
- */
-var changeFileSize = function (w, h) { return __awaiter(void 0, void 0, void 0, function () {
-    var height, width, f;
+//First let's create a function that takes a directory name in
+// and create it from the command line.
+var fs_1 = require("fs");
+var writeCache = function (fileName) { return __awaiter(void 0, void 0, void 0, function () {
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
-                height = parseInt(h);
-                width = parseInt(w);
-                f = sharp_1.default('../../images/fjord.jpg').resize(height, width);
-                return [4 /*yield*/, f.toFile('../../images/test.jpg')];
+                if (!fileName) return [3 /*break*/, 2];
+                // This is where the file would be written
+                return [4 /*yield*/, fs_1.promises.writeFile('./test.txt', 'test')];
             case 1:
+                // This is where the file would be written
                 _a.sent();
-                return [2 /*return*/];
+                _a.label = 2;
+            case 2: return [2 /*return*/];
         }
     });
 }); };
-exports.changeFileSize = changeFileSize;
-//# sourceMappingURL=indexService.js.map
+exports.default = writeCache;
+//# sourceMappingURL=cacheService.js.map
