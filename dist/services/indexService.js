@@ -41,6 +41,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.changeFileSize = exports.default = void 0;
 var sharp_1 = __importDefault(require("sharp"));
+var path_1 = __importDefault(require("path"));
 var parseText = function (inText) {
     return inText;
 };
@@ -48,22 +49,33 @@ exports.default = parseText;
 /**
  * This is the function that will change the size of the image.
  * NOTE: Called from the controller layer, that passes on the information.
- * @param image
  * @param width
  * @param height
  */
-var changeFileSize = function (w, h) { return __awaiter(void 0, void 0, void 0, function () {
-    var height, width, f;
+var changeFileSize = function (h, w, name) { return __awaiter(void 0, void 0, void 0, function () {
+    var isSuccessful, source, outFile, f, e_1;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
-                height = parseInt(h);
-                width = parseInt(w);
-                f = sharp_1.default('../../images/fjord.jpg').resize(height, width);
-                return [4 /*yield*/, f.toFile('../../images/test.jpg')];
+                // Read a raw array of pixels and save it to a png
+                console.log('>>', name);
+                isSuccessful = false;
+                _a.label = 1;
             case 1:
+                _a.trys.push([1, 3, , 4]);
+                source = path_1.default.join(__dirname, '..', '..', 'images', name);
+                outFile = path_1.default.join(__dirname, '..', '..', 'images', name + "_" + h + "_" + w + ".jpg");
+                f = sharp_1.default(source).resize(parseInt(h), parseInt(w));
+                return [4 /*yield*/, f.toFile(outFile)];
+            case 2:
                 _a.sent();
-                return [2 /*return*/];
+                isSuccessful = true;
+                return [3 /*break*/, 4];
+            case 3:
+                e_1 = _a.sent();
+                console.log(e_1);
+                return [3 /*break*/, 4];
+            case 4: return [2 /*return*/, isSuccessful];
         }
     });
 }); };

@@ -38,15 +38,21 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var indexService_1 = require("../services/indexService");
 var imageController = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var _a, w, h;
-    return __generator(this, function (_b) {
-        switch (_b.label) {
+    var result, w, h, name_1;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
             case 0:
-                _a = req.query, w = _a.w, h = _a.h;
-                return [4 /*yield*/, indexService_1.changeFileSize(h, w)];
+                result = false;
+                if (!(req.query && req.query.w && req.query.h)) return [3 /*break*/, 2];
+                w = req.query.w;
+                h = req.query.h;
+                name_1 = req.query.name;
+                return [4 /*yield*/, indexService_1.changeFileSize(h, w, name_1)];
             case 1:
-                _b.sent();
-                res.send('successful');
+                result = _a.sent();
+                _a.label = 2;
+            case 2:
+                res.send('successful' + " " + result);
                 return [2 /*return*/];
         }
     });
