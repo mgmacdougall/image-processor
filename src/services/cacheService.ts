@@ -9,7 +9,6 @@ import { promises as fs } from 'fs';
 
 const writeCache = async (fileName: string): Promise<void> => {
   if (fileName) {
-    // This is where the file would be written
     await fs.writeFile('./test.txt', 'test');
   }
 };

@@ -52,7 +52,7 @@ var imageController = function (req, res) { return __awaiter(void 0, void 0, voi
                 result = _a.sent();
                 _a.label = 2;
             case 2:
-                res.send('successful' + " " + result);
+                res.send('successful' + ' ' + result);
                 return [2 /*return*/];
         }
     });

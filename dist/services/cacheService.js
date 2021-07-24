@@ -47,10 +47,8 @@ var writeCache = function (fileName) { return __awaiter(void 0, void 0, void 0, 
         switch (_a.label) {
             case 0:
                 if (!fileName) return [3 /*break*/, 2];
-                // This is where the file would be written
                 return [4 /*yield*/, fs_1.promises.writeFile('./test.txt', 'test')];
             case 1:
-                // This is where the file would be written
                 _a.sent();
                 _a.label = 2;
             case 2: return [2 /*return*/];

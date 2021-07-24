@@ -46,6 +46,12 @@ var parseText = function (inText) {
     return inText;
 };
 exports.default = parseText;
+var removeExtensions = function (fName) {
+    if (fName.indexOf('.')) {
+        return "" + fName.split('.')[0];
+    }
+    return fName;
+};
 /**
  * This is the function that will change the size of the image.
  * NOTE: Called from the controller layer, that passes on the information.
@@ -53,18 +59,17 @@ exports.default = parseText;
  * @param height
  */
 var changeFileSize = function (h, w, name) { return __awaiter(void 0, void 0, void 0, function () {
-    var isSuccessful, source, outFile, f, e_1;
+    var isSuccessful, cleanedFile, source, outFile, f, e_1;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
-                // Read a raw array of pixels and save it to a png
-                console.log('>>', name);
                 isSuccessful = false;
                 _a.label = 1;
             case 1:
                 _a.trys.push([1, 3, , 4]);
-                source = path_1.default.join(__dirname, '..', '..', 'images', name);
-                outFile = path_1.default.join(__dirname, '..', '..', 'images', name + "_" + h + "_" + w + ".jpg");
+                cleanedFile = removeExtensions(name);
+                source = path_1.default.join(__dirname, '..', '..', 'images', cleanedFile + ".jpg");
+                outFile = path_1.default.join(__dirname, '..', '..', 'images', 'cache', cleanedFile + "_" + h + "_" + w + ".jpg");
                 f = sharp_1.default(source).resize(parseInt(h), parseInt(w));
                 return [4 /*yield*/, f.toFile(outFile)];
             case 2:

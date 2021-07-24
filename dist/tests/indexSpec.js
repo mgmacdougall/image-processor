@@ -41,6 +41,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var supertest_1 = __importDefault(require("supertest"));
 var index_1 = __importDefault(require("../index"));
+var path_1 = __importDefault(require("path"));
+var fs_1 = __importDefault(require("fs"));
 var request = supertest_1.default(index_1.default);
 describe('Index Route tests', function () {
     it('GET "/" should return "200" when called ', function () { return __awaiter(void 0, void 0, void 0, function () {
@@ -55,14 +57,32 @@ describe('Index Route tests', function () {
             }
         });
     }); });
-    it('GET "/" should return the text "Hi"', function () { return __awaiter(void 0, void 0, void 0, function () {
-        var result;
+    it('GET "/" with correct query params (w, h, name) should pass"', function () { return __awaiter(void 0, void 0, void 0, function () {
+        var images, files, result;
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0: return [4 /*yield*/, request.get('/')];
+                case 0: return [4 /*yield*/, request.get('/?w=100&h=200&name=fjord.jpg')];
                 case 1:
-                    result = _a.sent();
-                    expect(result.text).toBe('Hi');
+                    _a.sent();
+                    images = path_1.default.join(__dirname, '..', '..', 'images', 'cache');
+                    files = fs_1.default.readdirSync(images);
+                    result = files.includes('fjord_200_100.jpg');
+                    expect(result).toBe(true);
+                    return [2 /*return*/];
+            }
+        });
+    }); });
+    it('GET "/" with correct query params (w, h, name=test.jpg) should pass"', function () { return __awaiter(void 0, void 0, void 0, function () {
+        var images, files, result;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4 /*yield*/, request.get('/?w=100&h=200&name=fjord.jpg')];
+                case 1:
+                    _a.sent();
+                    images = path_1.default.join(__dirname, '..', '..', 'images', 'cache');
+                    files = fs_1.default.readdirSync(images);
+                    result = files.includes('fjord_200_100.jpg');
+                    expect(result).toBe(true);
                     return [2 /*return*/];
             }
         });
