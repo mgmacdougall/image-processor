@@ -1,9 +1,10 @@
-import sharp from 'sharp';
+import sharp, { OutputInfo } from 'sharp';
 import path from 'path';
-import { promises as fs } from 'fs';
-const parseText = (inText: string): string => {
-  return inText;
-};
+import { promises as fsPromises } from 'fs';
+
+// Default directories
+const imageSourceDir = path.join(__dirname, '..', '..', 'images');
+const imageCacheDir = path.join(__dirname, '..', '..', 'images', 'cache');
 
 const removeExtensions = (fName: string) => {
   if (fName.indexOf('.')) {
@@ -12,6 +13,12 @@ const removeExtensions = (fName: string) => {
   return fName;
 };
 
+const doesFileExistInImgDir = async (name: string | null): Promise<boolean> => {
+  const source: string = imageSourceDir;
+  const files: string[] = await fsPromises.readdir(source);
+  const isFound: boolean = name ? files.indexOf(name) > 1 : false;
+  return isFound;
+};
 
 /**
  * This is the function that will change the size of the image.
@@ -19,21 +26,31 @@ const removeExtensions = (fName: string) => {
  * @param width
  * @param height
  */
-const changeFileSize = async (h: string, w: string, name: string): Promise<boolean> => {
-  // Read a raw array of pixels and save it to a png
+const changeFileSize = async (h: number | null, w: number | null, name: string | null): Promise<boolean> => {
   let isSuccessful = false;
-  try {
-    const cleanedFile = removeExtensions(name);
-    const source = path.join(__dirname, '..', '..', 'images', `${cleanedFile}.jpg`);
-    const outFile = path.join(__dirname, '..', '..', 'images', 'cache', `${cleanedFile}_${h}_${w}.jpg`);
-
-    const f = sharp(source).resize(parseInt(h), parseInt(w));
-    await f.toFile(outFile);
-    isSuccessful = true;
-  } catch (e) {
-    console.log(e);
+  if (await doesFileExistInImgDir(name)) {
+    try {
+      const cleanedFile = removeExtensions(name || 'default');
+      const source = path.join(imageSourceDir, `${cleanedFile}.jpg`);
+      const outFile = path.join(imageCacheDir, `${cleanedFile}_${h}_${w}.jpg`);
+      if (h && w) {
+        await resizeImage(source, h, w, outFile);
+        isSuccessful = true;
+      }
+    } catch (e) {
+      console.log(e);
+    }
   }
   return isSuccessful;
 };
 
-export { parseText as default, changeFileSize };
+const resizeImage = async (inSource: string, height: number, width: number, outLocation: string): Promise<OutputInfo> => {
+  try {
+    const _resizedImg = sharp(inSource, { raw: { width: width, height: height, channels: 3 } });
+    return await _resizedImg.toFile(outLocation);
+  } catch (error) {
+    throw new Error('Resize image failed with');
+  }
+};
+
+export default changeFileSize;

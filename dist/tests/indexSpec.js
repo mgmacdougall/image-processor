@@ -42,14 +42,19 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var supertest_1 = __importDefault(require("supertest"));
 var index_1 = __importDefault(require("../index"));
 var path_1 = __importDefault(require("path"));
-var fs_1 = __importDefault(require("fs"));
+var fs_1 = require("fs");
+var rimraf_1 = __importDefault(require("rimraf"));
 var request = supertest_1.default(index_1.default);
+afterEach(function () {
+    var images = path_1.default.join(__dirname, '..', '..', 'images', 'cache/*');
+    rimraf_1.default(images, function (e) { return console.log('Done'); });
+});
 describe('Index Route tests', function () {
-    it('GET "/" should return "200" when called ', function () { return __awaiter(void 0, void 0, void 0, function () {
+    it('POST "/" should return "200" when called ', function () { return __awaiter(void 0, void 0, void 0, function () {
         var result;
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0: return [4 /*yield*/, request.get('/')];
+                case 0: return [4 /*yield*/, request.post('/')];
                 case 1:
                     result = _a.sent();
                     expect(result.statusCode).toEqual(200);
@@ -57,32 +62,53 @@ describe('Index Route tests', function () {
             }
         });
     }); });
-    it('GET "/" with correct query params (w, h, name) should pass"', function () { return __awaiter(void 0, void 0, void 0, function () {
+    it('POST "/" with correct query params (w, h, name) should pass"', function () { return __awaiter(void 0, void 0, void 0, function () {
         var images, files, result;
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0: return [4 /*yield*/, request.get('/?w=100&h=200&name=fjord.jpg')];
+                case 0: return [4 /*yield*/, request.post('/?w=100&h=200&name=fjord.jpg')];
                 case 1:
                     _a.sent();
                     images = path_1.default.join(__dirname, '..', '..', 'images', 'cache');
-                    files = fs_1.default.readdirSync(images);
+                    return [4 /*yield*/, fs_1.promises.readdir(images)];
+                case 2:
+                    files = _a.sent();
                     result = files.includes('fjord_200_100.jpg');
                     expect(result).toBe(true);
                     return [2 /*return*/];
             }
         });
     }); });
-    it('GET "/" with correct query params (w, h, name=test.jpg) should pass"', function () { return __awaiter(void 0, void 0, void 0, function () {
+    it('POST "/" with incorrect query params for name "test.jpg" should pass"', function () { return __awaiter(void 0, void 0, void 0, function () {
         var images, files, result;
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0: return [4 /*yield*/, request.get('/?w=100&h=200&name=fjord.jpg')];
+                case 0: return [4 /*yield*/, request.post('/?w=100&h=200&name=test.jpg')];
                 case 1:
                     _a.sent();
                     images = path_1.default.join(__dirname, '..', '..', 'images', 'cache');
-                    files = fs_1.default.readdirSync(images);
+                    return [4 /*yield*/, fs_1.promises.readdir(images)];
+                case 2:
+                    files = _a.sent();
                     result = files.includes('fjord_200_100.jpg');
-                    expect(result).toBe(true);
+                    expect(result).toBe(false);
+                    return [2 /*return*/];
+            }
+        });
+    }); });
+    it('POST "/" with incorrect query params extention only for name "." be caught successfully ', function () { return __awaiter(void 0, void 0, void 0, function () {
+        var images, files, result;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4 /*yield*/, request.post('/?w=100&h=200&name=.')];
+                case 1:
+                    _a.sent();
+                    images = path_1.default.join(__dirname, '..', '..', 'images', 'cache');
+                    return [4 /*yield*/, fs_1.promises.readdir(images)];
+                case 2:
+                    files = _a.sent();
+                    result = files.includes('.');
+                    expect(result).toBe(false);
                     return [2 /*return*/];
             }
         });

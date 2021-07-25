@@ -39,19 +39,32 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.changeFileSize = exports.default = void 0;
 var sharp_1 = __importDefault(require("sharp"));
 var path_1 = __importDefault(require("path"));
-var parseText = function (inText) {
-    return inText;
-};
-exports.default = parseText;
+var fs_1 = require("fs");
+// Default directories
+var imageSourceDir = path_1.default.join(__dirname, '..', '..', 'images');
+var imageCacheDir = path_1.default.join(__dirname, '..', '..', 'images', 'cache');
 var removeExtensions = function (fName) {
     if (fName.indexOf('.')) {
         return "" + fName.split('.')[0];
     }
     return fName;
 };
+var doesFileExistInImgDir = function (name) { return __awaiter(void 0, void 0, void 0, function () {
+    var source, files, isFound;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                source = imageSourceDir;
+                return [4 /*yield*/, fs_1.promises.readdir(source)];
+            case 1:
+                files = _a.sent();
+                isFound = name ? files.indexOf(name) > 1 : false;
+                return [2 /*return*/, isFound];
+        }
+    });
+}); };
 /**
  * This is the function that will change the size of the image.
  * NOTE: Called from the controller layer, that passes on the information.
@@ -59,30 +72,50 @@ var removeExtensions = function (fName) {
  * @param height
  */
 var changeFileSize = function (h, w, name) { return __awaiter(void 0, void 0, void 0, function () {
-    var isSuccessful, cleanedFile, source, outFile, f, e_1;
+    var isSuccessful, cleanedFile, source, outFile, e_1;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
                 isSuccessful = false;
-                _a.label = 1;
+                return [4 /*yield*/, doesFileExistInImgDir(name)];
             case 1:
-                _a.trys.push([1, 3, , 4]);
-                cleanedFile = removeExtensions(name);
-                source = path_1.default.join(__dirname, '..', '..', 'images', cleanedFile + ".jpg");
-                outFile = path_1.default.join(__dirname, '..', '..', 'images', 'cache', cleanedFile + "_" + h + "_" + w + ".jpg");
-                f = sharp_1.default(source).resize(parseInt(h), parseInt(w));
-                return [4 /*yield*/, f.toFile(outFile)];
+                if (!_a.sent()) return [3 /*break*/, 6];
+                _a.label = 2;
             case 2:
+                _a.trys.push([2, 5, , 6]);
+                cleanedFile = removeExtensions(name || 'default');
+                source = path_1.default.join(imageSourceDir, cleanedFile + ".jpg");
+                outFile = path_1.default.join(imageCacheDir, cleanedFile + "_" + h + "_" + w + ".jpg");
+                if (!(h && w)) return [3 /*break*/, 4];
+                return [4 /*yield*/, resizeImage(source, h, w, outFile)];
+            case 3:
                 _a.sent();
                 isSuccessful = true;
-                return [3 /*break*/, 4];
-            case 3:
+                _a.label = 4;
+            case 4: return [3 /*break*/, 6];
+            case 5:
                 e_1 = _a.sent();
                 console.log(e_1);
-                return [3 /*break*/, 4];
-            case 4: return [2 /*return*/, isSuccessful];
+                return [3 /*break*/, 6];
+            case 6: return [2 /*return*/, isSuccessful];
         }
     });
 }); };
-exports.changeFileSize = changeFileSize;
+var resizeImage = function (inSource, height, width, outLocation) { return __awaiter(void 0, void 0, void 0, function () {
+    var _resizedImg, error_1;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                _a.trys.push([0, 2, , 3]);
+                _resizedImg = sharp_1.default(inSource, { raw: { width: width, height: height, channels: 3 } });
+                return [4 /*yield*/, _resizedImg.toFile(outLocation)];
+            case 1: return [2 /*return*/, _a.sent()];
+            case 2:
+                error_1 = _a.sent();
+                throw new Error('Resize image failed with');
+            case 3: return [2 /*return*/];
+        }
+    });
+}); };
+exports.default = changeFileSize;
 //# sourceMappingURL=indexService.js.map

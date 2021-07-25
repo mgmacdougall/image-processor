@@ -35,24 +35,27 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-var indexService_1 = require("../services/indexService");
+var indexService_1 = __importDefault(require("../services/indexService"));
 var imageController = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var result, w, h, name_1;
+    var result, width, height, name;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
                 result = false;
-                if (!(req.query && req.query.w && req.query.h)) return [3 /*break*/, 2];
-                w = req.query.w;
-                h = req.query.h;
-                name_1 = req.query.name;
-                return [4 /*yield*/, indexService_1.changeFileSize(h, w, name_1)];
+                width = Number(req.query.w) || null;
+                height = Number(req.query.h) || null;
+                name = String(req.query.name) || null;
+                if (!(width && height && name)) return [3 /*break*/, 2];
+                return [4 /*yield*/, indexService_1.default(height, width, name)];
             case 1:
                 result = _a.sent();
                 _a.label = 2;
             case 2:
-                res.send('successful' + ' ' + result);
+                res.send(result);
                 return [2 /*return*/];
         }
     });
