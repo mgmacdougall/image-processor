@@ -8,9 +8,9 @@ var express_1 = __importDefault(require("express"));
 var ImageController_1 = __importDefault(require("../controllers/ImageController"));
 var FetchController_1 = __importDefault(require("../controllers/FetchController"));
 var indexRouter = express_1.default.Router();
-// Fetch image path
+// Fetch image
 indexRouter.get('/', FetchController_1.default);
-// Write Image path
+// Write Image
 indexRouter.post('/', ImageController_1.default);
 exports.default = indexRouter;
 //# sourceMappingURL=indexRoute.js.map

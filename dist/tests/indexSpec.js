@@ -57,7 +57,7 @@ describe('Index Route tests', function () {
                 case 0: return [4 /*yield*/, request.post('/')];
                 case 1:
                     result = _a.sent();
-                    expect(result.statusCode).toEqual(200);
+                    expect(result.statusCode).toEqual(302);
                     return [2 /*return*/];
             }
         });

@@ -13,7 +13,7 @@ afterEach(() => {
 describe('Index Route tests', () => {
   it('POST "/" should return "200" when called ', async () => {
     const result = await request.post('/');
-    expect(result.statusCode).toEqual(200);
+    expect(result.statusCode).toEqual(302);
   });
 
   it('POST "/" with correct query params (w, h, name) should pass"', async () => {

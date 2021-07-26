@@ -55,7 +55,8 @@ var imageController = function (req, res) { return __awaiter(void 0, void 0, voi
                 result = _a.sent();
                 _a.label = 2;
             case 2:
-                res.send(result);
+                //?w=300&h=100&name=fjord.jpg
+                res.redirect("/?w=" + width + "&h=" + height + "&name=" + name);
                 return [2 /*return*/];
         }
     });
