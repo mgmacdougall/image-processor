@@ -1,4 +1,6 @@
 node_modules
-/images
+images
 images/cache
-dist/**
+/dist/**
+*.js
+*.map

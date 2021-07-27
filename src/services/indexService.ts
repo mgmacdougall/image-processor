@@ -46,8 +46,11 @@ const changeFileSize = async (h: number | null, w: number | null, name: string |
 
 const resizeImage = async (inSource: string, height: number, width: number, outLocation: string): Promise<OutputInfo> => {
   try {
-    const _resizedImg = sharp(inSource, { raw: { width: width, height: height, channels: 3 } });
-    return await _resizedImg.toFile(outLocation);
+    console.log('here');
+    // const _resizedImg = sharp(inSource, { raw: { width: 50, height: 50, channels: 3 } });
+    const f = sharp(inSource).resize(height, width);
+    return f.toFile(outLocation);
+    // return await _resizedImg.toFile(outLocation);
   } catch (error) {
     throw new Error('Resize image failed with');
   }
