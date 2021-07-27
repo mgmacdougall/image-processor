@@ -1,7 +1,6 @@
 import * as express from 'express';
 import fetchImage from '../services/fetchService';
 import fetchBaseImage from '../services/fetchBaseImageService';
-import changeFileSize from '../services/indexService';
 
 const fetchFile = async (req: express.Request, res: express.Response): Promise<void> => {
   const name = String(req.query.name);
@@ -10,11 +9,11 @@ const fetchFile = async (req: express.Request, res: express.Response): Promise<v
   let result = 'No file found';
   
   if (name && height && width) {
-    await changeFileSize(parseInt(height), parseInt(width), name);
     result = await fetchImage(name, width, height);
     // return res.sendFile(result);
   } else if (name && height === 'undefined' && width === 'undefined') {
     result = await fetchBaseImage(name);
+    console.log('here2', result);
   }
 
   const test: number = result.indexOf('\\');
