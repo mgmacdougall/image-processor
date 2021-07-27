@@ -13,17 +13,16 @@ const removeExtensions = (fName: string) => {
   return fName;
 };
 
-const fetchImage = async (imageName: string, width: string, height: string): Promise<string> => {
+const fetchImage = async (height: number, width: number, imageName: string): Promise<string> => {
   const _imageName = `${removeExtensions(imageName)}_${height}_${width}.jpg`;
-  const result = 'No file found';
+  const no_result = 'No file found';
   try {
     const files = await fsPromises.readdir(imageCacheDir);
     const file = files.filter((file: string) => file === _imageName);
-    return file.length === 1 ? path.join(imageCacheDir, file.toString()) : 'no file found';
+    return file.length === 1 ? path.join(imageCacheDir, file.toString()) : no_result;
   } catch (e) {
-    console.log('No file found');
+    throw new Error(e);
   }
-  return result;
 };
 
 export default fetchImage;

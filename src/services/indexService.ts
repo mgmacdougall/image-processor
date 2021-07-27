@@ -1,4 +1,4 @@
-import sharp, { OutputInfo } from 'sharp';
+import sharp from 'sharp';
 import path from 'path';
 import { promises as fsPromises } from 'fs';
 
@@ -44,12 +44,11 @@ const changeFileSize = async (h: number | null, w: number | null, name: string |
   return isSuccessful;
 };
 
-const resizeImage = async (inSource: string, height: number, width: number, outLocation: string): Promise<OutputInfo> => {
+const resizeImage = async (inSource: string, height: number, width: number, outLocation: string): Promise<void> => {
   try {
-    const _resizedImg = sharp(inSource, { raw: { width: width, height: height, channels: 3 } });
-    return await _resizedImg.toFile(outLocation);
+    await sharp(inSource).resize(width, height).toFile(outLocation);
   } catch (error) {
-    throw new Error('Resize image failed with');
+    console.log(error);
   }
 };
 
