@@ -7,7 +7,7 @@ import rimraf from 'rimraf';
 const request = superTest(app);
 afterEach(() => {
   const images: string = path.join(__dirname, '..', '..', 'images', 'cache/*');
-  rimraf(images, (e) => console.log('Done'));
+  rimraf(images, (e) => console.log('done', e));
 });
 
 describe('Index Route tests', () => {
@@ -28,7 +28,7 @@ describe('Index Route tests', () => {
     await request.post('/?w=100&h=200&name=test.jpg');
     const images: string = path.join(__dirname, '..', '..', 'images', 'cache');
     const files: string[] = await fsPromises.readdir(images);
-    const result: boolean = files.includes('fjord_200_100.jpg');
+    const result: boolean = files.includes('test_200_100.jpg');
     expect(result).toBe(false);
   });
 
